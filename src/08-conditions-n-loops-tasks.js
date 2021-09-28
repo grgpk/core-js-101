@@ -180,8 +180,14 @@ function isInsideCircle(circle, point) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+function findFirstSingleChar(str) {
+  for (let i = 0; i < str.length; i += 1) {
+    const c = str.charAt(i);
+    if (str.indexOf(c) === i && str.indexOf(c, i + 1) === -1) {
+      return c;
+    }
+  }
+  return null;
 }
 
 
@@ -207,8 +213,33 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  let result = '';
+  if (a < b && isStartIncluded && isEndIncluded) {
+    result = `[${a}, ${b}]`;
+  }
+  if (a > b && isStartIncluded && isEndIncluded) {
+    result = `[${b}, ${a}]`;
+  }
+  if (a > b && isStartIncluded && isEndIncluded === false) {
+    result = `[${b}, ${a})`;
+  }
+  if (a < b && isStartIncluded && isEndIncluded === false) {
+    result = `[${a}, ${b})`;
+  }
+  if (a < b && isStartIncluded === false && isEndIncluded) {
+    result = `(${a}, ${b}]`;
+  }
+  if (a > b && isStartIncluded === false && isEndIncluded) {
+    result = `(${b}, ${a}]`;
+  }
+  if (a > b && isStartIncluded === false && isEndIncluded === false) {
+    result = `(${b}, ${a})`;
+  }
+  if (a < b && isStartIncluded === false && isEndIncluded === false) {
+    result = `(${a}, ${b})`;
+  }
+  return result;
 }
 
 
@@ -224,8 +255,8 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 
@@ -241,8 +272,8 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  return Number(num.toString().split('').reverse().join(''));
 }
 
 
@@ -266,8 +297,24 @@ function reverseInteger(/* num */) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(num) {
+  const inputNum = num.toString();
+  let sum = 0;
+  let doubleUp = false;
+  for (let i = inputNum.length - 1; i >= 0; i -= 1) {
+    const curDigit = parseInt(inputNum.charAt(i), 10);
+    if (doubleUp) {
+      if ((curDigit * 2) > 9) {
+        sum += (curDigit * 2) - 9;
+      } else {
+        sum += curDigit * 2;
+      }
+    } else {
+      sum += curDigit;
+    }
+    doubleUp = !doubleUp;
+  }
+  return (sum % 10) === 0;
 }
 
 /**
@@ -284,8 +331,15 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(number) {
+  let sum = number;
+  let arr = [];
+  const reducer = (a, b) => parseInt(a, 10) + parseInt(b, 10);
+  while (sum > 9) {
+    arr = sum.toString().split('');
+    sum = arr.reduce(reducer);
+  }
+  return sum;
 }
 
 
@@ -310,8 +364,18 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(input) {
+  const brackets = '[]{}()<>';
+  const stack = [];
+  for (let i = 0; i < input.length; i += 1) {
+    const bracketsIndex = brackets.indexOf(input[i]);
+    if (bracketsIndex % 2 === 0) {
+      stack.push(bracketsIndex + 1);
+    } else if (stack.pop() !== bracketsIndex) {
+      return false;
+    }
+  }
+  return stack.length === 0;
 }
 
 
@@ -335,8 +399,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return parseInt(num, n).toString();
 }
 
 
